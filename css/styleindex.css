@@ -1,0 +1,35 @@
+body, html {
+    height: 100%;
+    background-color: #f0f8ff; /* Fundo azul claro */
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex-direction: column;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00428a;
+}
+
+.card {
+    max-width: 400px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card-title {
+    color: #333333;
+}
+
+.card-text {
+    color: #666666;
+}
