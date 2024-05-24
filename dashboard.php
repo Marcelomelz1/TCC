@@ -2,19 +2,39 @@
 include('header.php');
 include('con_bd.php');
 
-
-// Consulta para buscar chamados com base nos filtros
-$sql = "SELECT c.id, c.tipo_problema, c.localizacao, c.status, u.nome AS usuario_nome 
-        FROM chamados c 
-        JOIN usuarios u ON c.usuario_id = u.id";
-$result = $conn->query($sql);
-
+// Inicializa a variável de chamados
 $chamados = [];
+
+// Verifica o tipo de usuário logado
+$user_id = $_SESSION['user_id'];
+$user_tipo = $_SESSION['user_tipo'];
+
+if ($user_tipo == 1) {
+    // Se o usuário for de nível 1, filtra os chamados pelo ID do usuário logado
+    $sql = "SELECT c.id, c.tipo_problema, c.localizacao, c.status, u.nome AS usuario_nome 
+            FROM chamados c 
+            JOIN usuarios u ON c.usuario_id = u.id
+            WHERE c.usuario_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+} else {
+    // Caso contrário, lista todos os chamados
+    $sql = "SELECT c.id, c.tipo_problema, c.localizacao, c.status, u.nome AS usuario_nome 
+            FROM chamados c 
+            JOIN usuarios u ON c.usuario_id = u.id";
+    $stmt = $conn->prepare($sql);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $chamados[] = $row;
     }
 }
+
+$stmt->close();
 $conn->close();
 ?>
 
@@ -45,7 +65,6 @@ $conn->close();
                         <?php if ($_SESSION['user_tipo'] != 1): ?>
                             <th>Ações</th>
                         <?php endif; ?>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -56,9 +75,7 @@ $conn->close();
                             <td><?php echo $chamado['tipo_problema']; ?></td>
                             <td><?php echo $chamado['localizacao']; ?></td>
                             <td><?php echo $chamado['status']; ?></td>
-                            <?php if ($_SESSION['user_tipo'] != 1): ?>
-                                <td><a href="edit_ticket.php?id=<?php echo $chamado['id']; ?>">Editar</a></td>
-                            <?php endif; ?>
+                            <td><a class="btn btn-outline-success" href="view_ticket.php?id=<?php echo $chamado['id']; ?>">Ver</a></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
