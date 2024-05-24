@@ -1,28 +1,15 @@
 <?php
 session_start();
-
-// Configurações do banco de dados
-$host = 'localhost';
-$db = 'staff_assist_it';
-$user = 'root';
-$pass = '';
-
-// Conectando ao banco de dados
-$conn = new mysqli($host, $user, $pass, $db);
-
-// Verifica a conexão
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include('con_bd.php');
 
 // Verifica se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
-    $sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
+    $sql = "SELECT * FROM usuarios WHERE email = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ss', $email, $senha);
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -30,13 +17,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result->num_rows > 0) {
         // Usuário encontrado
         $user = $result->fetch_assoc();
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['nome'];
-        $_SESSION['user_type'] = $user['tipo'];
 
-        // Redireciona para o painel apropriado
-        header('Location: dashboard.php');
-        exit();
+        // Verifica a senha
+        if (password_verify($senha, $user['senha'])) {
+            // Senha correta
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_nome'] = $user['nome'];
+            $_SESSION['user_tipo'] = $user['tipo'];
+
+                if ($user['status'] == 1) {
+                    // Redireciona para o painel apropriado
+                    header('Location: dashboard.php');
+                    exit();
+                } else {
+                    $error = "Usuário desativado, entre em contato com o administrador.";
+                }
+        } else {
+            // Senha incorreta
+            $error = "Credenciais inválidas. Tente novamente.";
+        }
     } else {
         // Usuário não encontrado
         $error = "Credenciais inválidas. Tente novamente.";
@@ -47,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
