@@ -1,5 +1,5 @@
 
-<div class="fixed-bottom">
+<div class="bottom">
 <footer>
   <p class="text-center">&copy; 2024 Staff Assist I.T.</p>
 </footer>

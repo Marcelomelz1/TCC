@@ -47,12 +47,27 @@ $conn->close();
                     <?php echo $_SESSION['success_message']; ?>
                     <?php unset($_SESSION['success_message']); ?>
                 </div>
-                <script>
-                    setTimeout(function() {
-                        document.getElementById('successMessage').style.display = 'none';
-                    }, 5000);
-                </script>
             <?php endif; ?>
+
+            <?php if (isset($_SESSION['error_message'])): ?>
+                <div class="alert alert-danger" role="alert" id="errorMessage">
+                    <?php echo $_SESSION['error_message']; ?>
+                    <?php unset($_SESSION['error_message']); ?>
+                </div>
+            <?php endif; ?>
+
+            <script>
+                setTimeout(function() {
+                    var successMessage = document.getElementById('successMessage');
+                    var errorMessage = document.getElementById('errorMessage');
+                    if (successMessage) {
+                        successMessage.style.display = 'none';
+                    }
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }, 5000);
+            </script>
             <div> <!--class="table-responsive"-->
                 <table id="tabelaChamados" class="table table-striped align-middle bg-white">
                     <thead>
