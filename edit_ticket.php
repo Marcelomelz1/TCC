@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     $tipo_problema = $_POST['tipo_problema'];
     $localizacao = $_POST['localizacao'];
     $descricao = $_POST['descricao'];
+    $descricao_solucao = $_POST['descricao_solucao'];
     $status = $_POST['status'];
 
     // Obtém o estado atual do chamado antes da atualização
@@ -20,22 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     $stmt->close();
 
     // Insere o histórico da alteração
-    $sql_historico = "INSERT INTO historico_chamados (chamado_id, tipo_problema_anterior, tipo_problema_novo, localizacao_anterior, localizacao_nova, descricao_anterior, descricao_nova, status_anterior, status_novo, data_alteracao)
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+    $sql_historico = "INSERT INTO historico_chamados (chamado_id, tipo_problema_anterior, tipo_problema_novo, localizacao_anterior, localizacao_nova, descricao_anterior, descricao_nova, descricao_solucao_anterior, descricao_solucao_nova, status_anterior, status_novo, data_alteracao)
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
     $stmt_historico = $conn->prepare($sql_historico);
-    $stmt_historico->bind_param('issssssss', $id,
+    $stmt_historico->bind_param('issssssssss',
+        $id,
         $chamado_anterior['tipo_problema'], $tipo_problema,
         $chamado_anterior['localizacao'], $localizacao,
         $chamado_anterior['descricao'], $descricao,
+        $chamado_anterior['descricao_solucao'], $descricao_solucao,
         $chamado_anterior['status'], $status
     );
     $stmt_historico->execute();
     $stmt_historico->close();
 
     // Atualiza o chamado
-    $sql = "UPDATE chamados SET tipo_problema = ?, localizacao = ?, descricao = ?, status = ?, data_atualizacao = NOW() WHERE id = ?";
+    $sql = "UPDATE chamados SET tipo_problema = ?, localizacao = ?, descricao = ?, descricao_solucao = ?, status = ?, data_atualizacao = NOW() WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ssssi', $tipo_problema, $localizacao, $descricao, $status, $id);
+    $stmt->bind_param('sssssi', $tipo_problema, $localizacao, $descricao, $descricao_solucao, $status, $id);
 
     if ($stmt->execute()) {
         $_SESSION['success_message'] = "Chamado atualizado com sucesso!";
@@ -112,15 +115,55 @@ $conn->close();
                             <option value="aberto" <?php if ($chamado['status'] == 'aberto') echo 'selected'; ?>>Aberto</option>
                             <option value="em_andamento" <?php if ($chamado['status'] == 'em_andamento') echo 'selected'; ?>>Em Andamento</option>
                             <option value="resolvido" <?php if ($chamado['status'] == 'resolvido') echo 'selected'; ?>>Resolvido</option>
+                            <?php if ($_SESSION['user_tipo'] != 1){ ?>
                             <option value="encerrado" <?php if ($chamado['status'] == 'encerrado') echo 'selected'; ?>>Encerrado</option>
+                            <?php } ?>
                         </select>
                     </div>
+                    <?php if ($_SESSION['user_tipo'] != 1){ ?>
+                        <div class="mb-3">
+                            <label for="descricao_solucao" class="form-label">Descrição Solução</label>
+                            <select class="form-select" id="descricao_solucao_select" name="descricao_solucao_select" required>
+                                <option value="" disabled selected>Selecione uma opção</option>
+                                <option value="Reiniciar o dispositivo">Reiniciar o dispositivo</option>
+                                <option value="Atualizar o software">Atualizar o software</option>
+                                <option value="Substituir o hardware">Substituir o hardware</option>
+                                <option value="Reconfigurar as configurações">Reconfigurar as configurações</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                            <textarea class="form-control mt-3" id="descricao_solucao" name="descricao_solucao" rows="3" style="display:none;" placeholder="Descreva a solução"></textarea>
+                        </div>
+                    <?php } ?>
                     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                 </form>
             </div>
         </div>
     </div>
+<script>
+    document.getElementById('descricao_solucao_select').addEventListener('change', function () {
+        var textarea = document.getElementById('descricao_solucao');
+        if (this.value === 'Outro') {
+            textarea.style.display = 'block';
+            textarea.required = true;
+        } else {
+            textarea.style.display = 'none';
+            textarea.value = this.value;
+            textarea.required = false;
+        }
+    });
 
+    // Ensure the textarea is filled correctly on form load if the value is "Outro"
+    window.addEventListener('load', function () {
+        var select = document.getElementById('descricao_solucao_select');
+        var textarea = document.getElementById('descricao_solucao');
+        if (select.value === 'Outro') {
+            textarea.style.display = 'block';
+            textarea.required = true;
+        } else {
+            textarea.style.display = 'none';
+        }
+    });
+</script>
 <?php
 include('footer.php');
 ?>
