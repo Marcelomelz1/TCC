@@ -45,10 +45,10 @@ $stmt_avaliacao->close();
 $conn->close();
 ?>
 
-<div class="container mt-5">
+<div class="container mt-5 card">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2>Detalhes do Chamado</h2>
+            <h2 class="text-center">Detalhes do Chamado</h2>
             <div class="mb-3">
                 <label class="form-label">Usuário</label>
                 <input type="text" class="form-control" value="<?php echo $chamado['usuario_nome']; ?>" disabled>
@@ -93,9 +93,11 @@ $conn->close();
                     <input type="text" class="form-control" value="<?php echo $avaliacao['data_avaliacao']; ?>" disabled>
                 </div>
             <?php endif; ?>
-            <a class="btn btn-outline-primary" href="view_history.php?id=<?php echo $chamado['id']; ?>">Ver historico</a>
-            <a href="edit_ticket.php?id=<?php echo $chamado['id']; ?>" class="btn btn-primary">Editar</a>
-            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
+            <div class="row-cols-5 text-center pb-3">
+                <a class="btn btn-outline-primary" href="view_history.php?id=<?php echo $chamado['id']; ?>">Ver historico</a>
+                <a href="edit_ticket.php?id=<?php echo $chamado['id']; ?>" class="btn btn-primary">Editar</a>
+                <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
+            </div>
         </div>
     </div>
 </div>

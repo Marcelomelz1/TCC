@@ -80,7 +80,7 @@ if (isset($_GET['id'])) {
 $conn->close();
 ?>
 
-    <div class="container mt-5">
+    <div class="container mt-5 card">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <h2>Editar Chamado</h2>
@@ -134,7 +134,10 @@ $conn->close();
                             <textarea class="form-control mt-3" id="descricao_solucao" name="descricao_solucao" rows="3" style="display:none;" placeholder="Descreva a solução"></textarea>
                         </div>
                     <?php } ?>
+                    <div class="text-center">
                     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        <a href="view_ticket.php?id=<?php echo $chamado['id']; ?>" class="btn btn-secondary">Voltar</a>
+                    </div>
                 </form>
             </div>
         </div>

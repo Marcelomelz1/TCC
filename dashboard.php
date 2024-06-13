@@ -41,7 +41,7 @@ $conn->close();
 ?>
 
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center card">
         <div class="col-12">
             <h2 class="text-center mb-4">Chamados Registrados</h2>
             <?php if (isset($_SESSION['success_message'])): ?>
