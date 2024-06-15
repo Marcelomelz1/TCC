@@ -2,6 +2,11 @@
 include('header.php');
 include('con_bd.php');
 
+if ($_SESSION['user_tipo'] != 3) {
+    header('Location: dashboard.php');
+    exit; // Sempre use exit após redirecionar para garantir que o script pare de executar
+}
+
 // Verifica se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     $id = $_POST['id'];
@@ -53,8 +58,8 @@ $conn->close();
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h2>Editar Usuário</h2>
+            <div class="col-md-8 card">
+                <h2 class="text-center">Editar Usuário</h2>
                 <?php if (isset($success_message)): ?>
                     <div class="alert alert-success" role="alert">
                         <?php echo $success_message; ?>
@@ -94,7 +99,10 @@ $conn->close();
                             <option value="0" <?php if ($usuario['status'] == 0) echo 'selected'; ?>>Desativado</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    <div class="text-center pb-2">
+                    <a type="button" class="btn btn-primary text-center" href="dashboard.php">Voltar</a>
+                    <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                    </div>
                 </form>
             </div>
         </div>

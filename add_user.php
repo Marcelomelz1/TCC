@@ -2,12 +2,17 @@
 include('header.php');
 include('con_bd.php');
 
+if ($_SESSION['user_tipo'] == 1) {
+    header('Location: dashboard.php');
+    exit; // Sempre use exit após redirecionar para garantir que o script pare de executar
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
     $senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);
     $tipo = $_POST['tipo'];
-    $tipo = $_POST['status'];
+    $status = $_POST['status'];
 
     $sql = "INSERT INTO usuarios (nome, email, senha, tipo, status) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
@@ -26,8 +31,8 @@ $conn->close();
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2>Adicionar Usuário</h2>
+            <div class="col-md-6 card">
+                <h2 class="text-center">Adicionar Usuário</h2>
                 <?php if (isset($success_message)): ?>
                     <div class="alert alert-success" role="alert">
                         <?php echo $success_message; ?>
@@ -68,7 +73,10 @@ $conn->close();
                             <option value="0">Desativado</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Usuário</button>
+                    <div class="text-center pb-2">
+                        <a type="button" class="btn btn-primary text-center" href="dashboard.php">Voltar</a>
+                         <button type="submit" class="btn btn-success text-center">Adicionar Usuário</button>
+                    </div>
                 </form>
             </div>
         </div>

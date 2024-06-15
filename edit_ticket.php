@@ -83,7 +83,7 @@ $conn->close();
     <div class="container mt-5 card">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h2>Editar Chamado</h2>
+                <h2 class="text-center">Editar Chamado</h2>
                 <?php if (isset($error_message)): ?>
                     <div class="alert alert-danger" role="alert">
                         <?php echo $error_message; ?>
@@ -116,33 +116,43 @@ $conn->close();
                             <option value="em_andamento" <?php if ($chamado['status'] == 'em_andamento') echo 'selected'; ?>>Em Andamento</option>
                             <option value="resolvido" <?php if ($chamado['status'] == 'resolvido') echo 'selected'; ?>>Resolvido</option>
                             <?php if ($_SESSION['user_tipo'] != 1){ ?>
-                            <option value="encerrado" <?php if ($chamado['status'] == 'encerrado') echo 'selected'; ?>>Encerrado</option>
+                                <option value="encerrado" <?php if ($chamado['status'] == 'encerrado') echo 'selected'; ?>>Encerrado</option>
                             <?php } ?>
                         </select>
                     </div>
                     <?php if ($_SESSION['user_tipo'] != 1){ ?>
-                        <div class="mb-3">
-                            <label for="descricao_solucao" class="form-label">Descrição Solução</label>
-                            <select class="form-select" id="descricao_solucao_select" name="descricao_solucao_select" required>
-                                <option value="" disabled selected>Selecione uma opção</option>
-                                <option value="Reiniciar o dispositivo">Reiniciar o dispositivo</option>
-                                <option value="Atualizar o software">Atualizar o software</option>
-                                <option value="Substituir o hardware">Substituir o hardware</option>
-                                <option value="Reconfigurar as configurações">Reconfigurar as configurações</option>
-                                <option value="Outro">Outro</option>
-                            </select>
-                            <textarea class="form-control mt-3" id="descricao_solucao" name="descricao_solucao" rows="3" style="display:none;" placeholder="Descreva a solução"></textarea>
-                        </div>
+                    <div class="mb-3" id="descricao-solucao-container" style="display: none;">
+                        <label for="descricao_solucao" class="form-label">Descrição Solução</label>
+                        <select class="form-select" id="descricao_solucao_select" name="descricao_solucao_select">
+                            <option value="" disabled selected>Selecione uma opção</option>
+                            <option value="Reiniciar o dispositivo">Reiniciar o dispositivo</option>
+                            <option value="Atualizar o software">Atualizar o software</option>
+                            <option value="Substituir o hardware">Substituir o hardware</option>
+                            <option value="Reconfigurar as configurações">Reconfigurar as configurações</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                        <textarea class="form-control mt-3" id="descricao_solucao" name="descricao_solucao" rows="3" style="display:none;" placeholder="Descreva a solução"></textarea>
+                    </div>
                     <?php } ?>
-                    <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    <div class="text-center pb-2">
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                         <a href="view_ticket.php?id=<?php echo $chamado['id']; ?>" class="btn btn-secondary">Voltar</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 <script>
+    document.getElementById('status').addEventListener('change', function () {
+        var descricaoSolucaoContainer = document.getElementById('descricao-solucao-container');
+        if (this.value === 'resolvido' || this.value === 'encerrado') {
+            descricaoSolucaoContainer.style.display = 'block';
+        } else {
+            descricaoSolucaoContainer.style.display = 'none';
+        }
+    });
+
     document.getElementById('descricao_solucao_select').addEventListener('change', function () {
         var textarea = document.getElementById('descricao_solucao');
         if (this.value === 'Outro') {
@@ -157,6 +167,14 @@ $conn->close();
 
     // Ensure the textarea is filled correctly on form load if the value is "Outro"
     window.addEventListener('load', function () {
+        var status = document.getElementById('status');
+        var descricaoSolucaoContainer = document.getElementById('descricao-solucao-container');
+        if (status.value === 'resolvido' || status.value === 'encerrado') {
+            descricaoSolucaoContainer.style.display = 'block';
+        } else {
+            descricaoSolucaoContainer.style.display = 'none';
+        }
+
         var select = document.getElementById('descricao_solucao_select');
         var textarea = document.getElementById('descricao_solucao');
         if (select.value === 'Outro') {
