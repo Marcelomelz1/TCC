@@ -23,14 +23,29 @@ if ($result->num_rows > 0) {
     }
 }
 
+$sql = "SELECT usuario_id FROM chamados WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$chamado = $result->fetch_assoc();
+
+
+// Verifica se o usuário tem permissão para editar o chamado
+if ($chamado['usuario_id'] != $_SESSION['user_id']) {
+    $_SESSION['error_message'] = "Você não tem permissão para ver este chamado.";
+    header('Location: dashboard.php');
+    exit();
+}
+
 $stmt->close();
 $conn->close();
 ?>
 
-<div class="container mt-5">
+<div class="container mt-5 card">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <h2>Histórico de Alterações do Chamado</h2>
+            <h2 class="text-center">Histórico de Alterações do Chamado</h2>
             <div> <!--class="table-responsive"-->
                 <table id="tabelaHistorico" class="table table-striped align-middle bg-white">
                     <thead>
@@ -70,6 +85,9 @@ $conn->close();
                 </table>
             </div class="table-responsive">
         </div>
+    </div>
+    <div class="text-center pb-2">
+        <a href="view_ticket.php?id=<?php echo $id; ?>" class="btn btn-secondary">Voltar</a>
     </div>
 </div>
 

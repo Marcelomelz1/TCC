@@ -133,7 +133,8 @@ $conn->close();
                         </select>
                         <textarea class="form-control mt-3" id="descricao_solucao" name="descricao_solucao" rows="3" style="display:none;" placeholder="Descreva a solução"></textarea>
                     </div>
-                    <?php } ?>
+                    <?php }?>
+
                     <div class="text-center pb-2">
                         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                         <a href="view_ticket.php?id=<?php echo $chamado['id']; ?>" class="btn btn-secondary">Voltar</a>
