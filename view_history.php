@@ -31,8 +31,8 @@ $result = $stmt->get_result();
 $chamado = $result->fetch_assoc();
 
 
-// Verifica se o usuário tem permissão para editar o chamado
-if ($chamado['usuario_id'] != $_SESSION['user_id']) {
+
+if ($chamado['usuario_id'] != $_SESSION['user_id'] && $_SESSION['user_tipo'] == 1) {
     $_SESSION['error_message'] = "Você não tem permissão para ver este chamado.";
     header('Location: dashboard.php');
     exit();
@@ -44,9 +44,9 @@ $conn->close();
 
 <div class="container mt-5 card">
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            <h2 class="text-center">Histórico de Alterações do Chamado</h2>
-            <div> <!--class="table-responsive"-->
+        <div class="col-md-12">
+            <h2 class="text-center pt-2 ">Histórico de Alterações do Chamado</h2>
+            <hr>
                 <table id="tabelaHistorico" class="table table-striped align-middle bg-white">
                     <thead>
                     <tr>
@@ -83,7 +83,7 @@ $conn->close();
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-            </div class="table-responsive">
+
         </div>
     </div>
     <div class="text-center pb-2">
@@ -92,14 +92,17 @@ $conn->close();
 </div>
 
 <script src="http://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="http://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-<script src="http://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
-<script src="http://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+
 <script>
     $(document).ready(function() {
         $('#tabelaHistorico').DataTable({
             "responsive": true,
             "autoWidth": true,
+            "paging":   false,
             "language": {
                 "url": "http://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
             },

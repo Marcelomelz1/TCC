@@ -43,7 +43,8 @@ $conn->close();
 <div class="container">
     <div class="row justify-content-center card">
         <div class="col-12">
-            <h2 class="text-center mb-4">Chamados Registrados</h2>
+            <h2 class="text-center pt-2 mb-4">Chamados Registrados</h2>
+            <hr></hr>
             <?php if (isset($_SESSION['success_message'])): ?>
                 <div class="alert alert-success" role="alert" id="successMessage">
                     <?php echo $_SESSION['success_message']; ?>
@@ -80,6 +81,7 @@ $conn->close();
                         <th>Localização</th>
                         <th>Status</th>
                         <th>Ações</th>
+                        <th>Avaliação</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -89,18 +91,43 @@ $conn->close();
                             <td><?php echo $chamado['usuario_nome']; ?></td>
                             <td><?php echo $chamado['tipo_problema']; ?></td>
                             <td><?php echo $chamado['localizacao']; ?></td>
-                            <td><?php echo $chamado['status']; ?></td>
+                            <td>
+                                <?php
+                                switch ($chamado['status']) {
+                                    case 'aberto':
+                                        ?> <span class="badge rounded-pill text-bg-danger">ABERTO</span> <?php
+                                        break;
+                                    case 'em_andamento':
+                                        ?> <span class="badge rounded-pill text-bg-primary">EM ANDAMENTO</span> <?php
+                                        break;
+                                    case 'resolvido':
+                                        ?> <span class="badge rounded-pill text-bg-warning">RESOLVIDO</span> <?php
+                                        break;
+                                    case 'encerrado':
+                                        ?> <span class="badge rounded-pill text-bg-success">ENCERRADO</span> <?php
+                                        break;
+                                    default:
+                                        ?> <span class="badge rounded-pill text-bg-primary"></span> <?php
+                                        break;
+                                }
+                                ?>
+                            </td>
                             <td>
                                 <a class="btn btn-outline-primary" href="view_ticket.php?id=<?php echo $chamado['id']; ?>">Ver</a>
+                            </td>
+                            <td>
                                 <?php if($chamado['usuario_id'] == $user_id){ ?>
                                     <?php if(($chamado['status'] == "resolvido" || $chamado['status'] == "encerrado") && !$chamado['avaliacao_id']){ ?>
                                         <a type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="<?php echo $chamado['id']; ?>">Avaliar</a>
                                     <?php } ?>
                                     <?php if(($chamado['status'] == "resolvido" || $chamado['status'] == "encerrado") && $chamado['avaliacao_id']){ ?>
-                                        <a type="button" class="btn btn-outline-success disabled" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="<?php echo $chamado['id']; ?>">Avaliado</a>
+                                        <a type="button" class="btn btn-outline-success disabled">Avaliado</a>
                                     <?php }
-                                } ?>
-
+                                } elseif (($chamado['status'] == "resolvido" || $chamado['status'] == "encerrado") && !$chamado['avaliacao_id']){?>
+                                    <a type="button" class="btn btn-outline-dark disabled">Não avaliado</a>
+                                <?php } elseif(($chamado['status'] == "resolvido" || $chamado['status'] == "encerrado") && $chamado['avaliacao_id']){ ?>
+                                    <a type="button" class="btn btn-outline-success disabled">Avaliado</a>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -147,17 +174,33 @@ $conn->close();
 </div>
 
 <script src="http://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="http://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-<script src="http://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
-<script src="http://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
 <script>
     $(document).ready(function() {
         $('#tabelaChamados').DataTable({
             "responsive": true,
             "autoWidth": true,
+            "paging":   false,
+            "order": [[4, 'asc']],
+            "rowReorder": {
+                selector: 'td:nth-child(4)'
+            },
+            "columnDefs": [
+                { targets: 0, responsivePriority: 6}, // Primeira coluna, maior prioridade
+                { targets: 1, responsivePriority: 5},
+                { targets: 2, responsivePriority: 4},
+                { targets: 3, responsivePriority: 3},
+                { targets: 4, responsivePriority: 2},
+                { targets: 5, responsivePriority: 1},
+                { targets: 6, responsivePriority: 7},
 
+            ],
             "language": {
-                "url": "http://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
             },
         });
 
