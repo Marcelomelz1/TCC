@@ -29,7 +29,7 @@ $conn->close();
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-8 card">
                 <h2>Criar Novo Chamado</h2>
                 <?php if (isset($error_message)): ?>
                     <div class="alert alert-danger" role="alert">
