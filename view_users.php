@@ -23,21 +23,22 @@ $conn->close();
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-10 card">
                 <h2 class="text-center mb-4">Lista de Usuários</h2>
+                <hr>
                 <div class="table-responsive">
-                    <table class="table table-striped align-middle bg-white">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Tipo</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                        <table class="table table-striped align-middle bg-white">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                         <?php foreach ($usuarios as $usuario): ?>
                             <tr>
                                 <td><?php echo $usuario['id']; ?></td>
@@ -68,6 +69,10 @@ $conn->close();
                         <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <div class="text-center pb-2">
+                        <a type="button" class="btn btn-primary text-center" href="dashboard.php">Voltar</a>
+                        <a type="button" class="btn btn-success text-center" href="add_user.php">Adicionar Usuário</a>
+                    </div>
                 </div>
             </div>
         </div>

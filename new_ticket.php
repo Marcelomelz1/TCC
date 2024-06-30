@@ -30,7 +30,8 @@ $conn->close();
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8 card">
-                <h2>Criar Novo Chamado</h2>
+                <h2 class="text-center">Criar Novo Chamado</h2>
+                <hr>
                 <?php if (isset($error_message)): ?>
                     <div class="alert alert-danger" role="alert">
                         <?php echo $error_message; ?>
@@ -56,7 +57,10 @@ $conn->close();
                         <label for="descricao" class="form-label">Descrição</label>
                         <textarea class="form-control" id="descricao" name="descricao" rows="4" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Criar Chamado</button>
+                    <div class="text-center pb-2">
+                        <a type="button" class="btn btn-primary text-center" href="dashboard.php">Voltar</a>
+                        <button type="submit" class="btn btn-success">Criar Chamado</button>
+                    </div>
                 </form>
             </div>
         </div>

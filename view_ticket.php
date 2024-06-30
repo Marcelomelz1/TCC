@@ -49,6 +49,7 @@ $conn->close();
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h2 class="text-center">Detalhes do Chamado</h2>
+            <hr>
             <div class="mb-3">
                 <label class="form-label">Usuário</label>
                 <input type="text" class="form-control" value="<?php echo $chamado['usuario_nome']; ?>" disabled>
@@ -86,7 +87,10 @@ $conn->close();
             <?php if ($chamado['status'] == 'encerrado' && $avaliacao): ?>
                 <div class="mb-3">
                     <label class="form-label">Avaliação</label>
-                    <input type="text" class="form-control" value="<?php echo $avaliacao['avaliacao']; ?> - <?php echo $avaliacao['comentario']; ?>" disabled>
+                    <div class="row col-12">
+                        <div class="col-2"><input type="text" class="form-control" value="<?php echo $avaliacao['avaliacao']; ?>" disabled> </div>
+                        <div class="col-10"><input type="text" class="form-control" value="<?php echo $avaliacao['comentario']; ?>" disabled> </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Data da Avaliação</label>

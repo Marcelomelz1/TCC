@@ -60,6 +60,7 @@ $conn->close();
         <div class="row justify-content-center">
             <div class="col-md-8 card">
                 <h2 class="text-center">Editar Usuário</h2>
+                <hr>
                 <?php if (isset($success_message)): ?>
                     <div class="alert alert-success" role="alert">
                         <?php echo $success_message; ?>

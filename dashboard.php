@@ -44,7 +44,7 @@ $conn->close();
     <div class="row justify-content-center card">
         <div class="col-12">
             <h2 class="text-center pt-2 mb-4">Chamados Registrados</h2>
-            <hr></hr>
+            <hr>
             <?php if (isset($_SESSION['success_message'])): ?>
                 <div class="alert alert-success" role="alert" id="successMessage">
                     <?php echo $_SESSION['success_message']; ?>
