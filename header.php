@@ -43,7 +43,7 @@ include('valida_login.php');
                         <?php endif; ?>
                     </ul>
                     <div class="d-flex ms-auto">
-                        <button class="btn btn-outline-success mx-1"><?php echo $_SESSION['user_nome']; echo " (" . $_SESSION['user_tipo'] . ")"; ?></button>
+                        <button class="btn border border-gray mx-1 " disabled><?php echo $_SESSION['user_nome'];?></button>
                         <a href="logout.php" class="btn btn-outline-danger mx-1">Sair</a>
                     </div>
                 </div>

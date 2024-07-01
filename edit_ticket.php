@@ -128,7 +128,7 @@ $conn->close();
                             <option value="Reiniciar o dispositivo">Reiniciar o dispositivo</option>
                             <option value="Atualizar o software">Atualizar o software</option>
                             <option value="Substituir o hardware">Substituir o hardware</option>
-                            <option value="Reconfigurar as configurações">Reconfigurar as configurações</option>
+                            <option value="Resetar as configurações">Resetar as configurações</option>
                             <option value="Outro">Outro</option>
                         </select>
                         <textarea class="form-control mt-3" id="descricao_solucao" name="descricao_solucao" rows="3" style="display:none;" placeholder="Descreva a solução"></textarea>

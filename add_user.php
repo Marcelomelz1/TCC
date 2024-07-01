@@ -75,7 +75,7 @@ $conn->close();
                         </select>
                     </div>
                     <div class="text-center pb-2">
-                        <a type="button" class="btn btn-primary text-center" href="dashboard.php">Voltar</a>
+                        <a type="button" class="btn btn-primary text-center" href="view_users.php">Voltar</a>
                          <button type="submit" class="btn btn-success text-center">Adicionar Usuário</button>
                     </div>
                 </form>
