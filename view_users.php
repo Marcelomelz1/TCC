@@ -4,10 +4,9 @@ include('con_bd.php');
 
 if ($_SESSION['user_tipo'] == 1) {
     header('Location: dashboard.php');
-    exit; // Sempre use exit após redirecionar para garantir que o script pare de executar
+    exit;
 }
 
-// Consulta para buscar todos os usuários
 $sql = "SELECT id, nome, email, tipo, status FROM usuarios";
 $result = $conn->query($sql);
 

@@ -2,15 +2,13 @@
 include('header.php');
 include('con_bd.php');
 
-// Inicializa a variável de chamados
+
 $chamados = [];
 
-// Verifica o tipo de usuário logado
 $user_id = $_SESSION['user_id'];
 $user_tipo = $_SESSION['user_tipo'];
 
 if ($user_tipo == 1) {
-    // Se o usuário for de nível 1, filtra os chamados pelo ID do usuário logado
     $sql = "SELECT c.id, c.usuario_id, c.tipo_problema, c.localizacao, c.status, u.nome AS usuario_nome, a.id AS avaliacao_id 
             FROM chamados c 
             JOIN usuarios u ON c.usuario_id = u.id
@@ -19,7 +17,6 @@ if ($user_tipo == 1) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $user_id);
 } else {
-    // Caso contrário, lista todos os chamados
     $sql = "SELECT c.id, c.usuario_id, c.tipo_problema, c.localizacao, c.status, u.nome AS usuario_nome, a.id AS avaliacao_id 
             FROM chamados c 
             JOIN usuarios u ON c.usuario_id = u.id
@@ -71,7 +68,7 @@ $conn->close();
                     }
                 }, 5000);
             </script>
-            <div> <!--class="table-responsive"-->
+            <div>
                 <table id="tabelaChamados" class="table table-striped align-middle bg-white">
                     <thead>
                     <tr>
@@ -138,7 +135,6 @@ $conn->close();
     </div>
 </div>
 
-<!-- Modal de Avaliação -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -190,7 +186,7 @@ $conn->close();
                 selector: 'td:nth-child(4)'
             },
             "columnDefs": [
-                { targets: 0, responsivePriority: 6}, // Primeira coluna, maior prioridade
+                { targets: 0, responsivePriority: 6},
                 { targets: 1, responsivePriority: 5},
                 { targets: 2, responsivePriority: 4},
                 { targets: 3, responsivePriority: 3},
@@ -205,8 +201,8 @@ $conn->close();
         });
 
         $('#exampleModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var chamadoId = button.data('id'); // Extract info from data-* attributes
+            var button = $(event.relatedTarget);
+            var chamadoId = button.data('id');
             var modal = $(this);
             modal.find('.modal-body #chamado_id').val(chamadoId);
         });

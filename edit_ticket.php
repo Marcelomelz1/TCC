@@ -2,7 +2,6 @@
 include('header.php');
 include('con_bd.php');
 
-// Verifica se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     $id = $_POST['id'];
     $tipo_problema = $_POST['tipo_problema'];
@@ -11,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     $descricao_solucao = $_POST['descricao_solucao'];
     $status = $_POST['status'];
 
-    // Obtém o estado atual do chamado antes da atualização
     $sql = "SELECT * FROM chamados WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $id);
@@ -20,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     $chamado_anterior = $result->fetch_assoc();
     $stmt->close();
 
-    // Insere o histórico da alteração
     $sql_historico = "INSERT INTO historico_chamados (chamado_id, tipo_problema_anterior, tipo_problema_novo, localizacao_anterior, localizacao_nova, descricao_anterior, descricao_nova, descricao_solucao_anterior, descricao_solucao_nova, status_anterior, status_novo, data_alteracao)
                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
     $stmt_historico = $conn->prepare($sql_historico);
@@ -35,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     $stmt_historico->execute();
     $stmt_historico->close();
 
-    // Atualiza o chamado
     $sql = "UPDATE chamados SET tipo_problema = ?, localizacao = ?, descricao = ?, descricao_solucao = ?, status = ?, data_atualizacao = NOW() WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('sssssi', $tipo_problema, $localizacao, $descricao, $descricao_solucao, $status, $id);
@@ -47,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     } else {
         $error_message = "Erro ao atualizar o chamado: " . $stmt->error;
     }
-
     $stmt->close();
 }
 
@@ -62,7 +57,6 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         $chamado = $result->fetch_assoc();
 
-        // Verifica se o usuário tem permissão para editar o chamado
         if ($_SESSION['user_tipo'] == 1 && $chamado['usuario_id'] != $_SESSION['user_id']) {
             $_SESSION['error_message'] = "Você não tem permissão para editar este chamado.";
             header('Location: dashboard.php');
@@ -166,7 +160,6 @@ $conn->close();
         }
     });
 
-    // Ensure the textarea is filled correctly on form load if the value is "Outro"
     window.addEventListener('load', function () {
         var status = document.getElementById('status');
         var descricaoSolucaoContainer = document.getElementById('descricao-solucao-container');

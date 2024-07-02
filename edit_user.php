@@ -4,10 +4,9 @@ include('con_bd.php');
 
 if ($_SESSION['user_tipo'] != 3) {
     header('Location: dashboard.php');
-    exit; // Sempre use exit após redirecionar para garantir que o script pare de executar
+    exit;
 }
 
-// Verifica se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     $id = $_POST['id'];
     $nome = $_POST['nome'];

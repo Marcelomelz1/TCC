@@ -4,7 +4,7 @@ include('con_bd.php');
 
 if ($_SESSION['user_tipo'] == 1) {
     header('Location: dashboard.php');
-    exit; // Sempre use exit após redirecionar para garantir que o script pare de executar
+    exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $error_message = "Erro ao criar o chamado: " . $stmt->error;
     }
-
     $stmt->close();
 }
 

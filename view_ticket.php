@@ -2,14 +2,12 @@
 include('header.php');
 include('con_bd.php');
 
-// Verifica se o ID do chamado foi fornecido
 if (!isset($_GET['id'])) {
     die("ID do chamado não fornecido.");
 }
 
 $id = $_GET['id'];
 
-// Consulta para buscar os detalhes do chamado
 $sql = "SELECT c.id, c.tipo_problema, c.localizacao, c.descricao, c.descricao_solucao, c.status, c.data_criacao, c.data_atualizacao, u.nome AS usuario_nome, c.usuario_id 
         FROM chamados c 
         JOIN usuarios u ON c.usuario_id = u.id 
@@ -24,7 +22,6 @@ if ($result->num_rows == 0) {
 }
 $chamado = $result->fetch_assoc();
 
-// Verifica se o usuário tem permissão para editar o chamado
 if ($_SESSION['user_tipo'] == 1 && $chamado['usuario_id'] != $_SESSION['user_id']) {
     $_SESSION['error_message'] = "Você não tem permissão para ver este chamado.";
     header('Location: dashboard.php');
@@ -33,7 +30,6 @@ if ($_SESSION['user_tipo'] == 1 && $chamado['usuario_id'] != $_SESSION['user_id'
 
 $stmt->close();
 
-// Consulta para buscar a avaliação do chamado, se existir
 $sql_avaliacao = "SELECT avaliacao, comentario, data_avaliacao FROM avaliacoes WHERE chamado_id = ?";
 $stmt_avaliacao = $conn->prepare($sql_avaliacao);
 $stmt_avaliacao->bind_param('i', $id);

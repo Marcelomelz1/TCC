@@ -2,7 +2,6 @@
 session_start();
 include('con_bd.php');
 
-// Verifica se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
@@ -13,12 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Verifica se o usuário foi encontrado
     if ($result->num_rows > 0) {
-        // Usuário encontrado
         $user = $result->fetch_assoc();
 
-        // Verifica a senha
         if (password_verify($senha, $user['senha'])) {
             // Senha correta
             $_SESSION['user_id'] = $user['id'];
@@ -26,21 +22,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_tipo'] = $user['tipo'];
 
                 if ($user['status'] == 1) {
-                    // Redireciona para o painel apropriado
                     header('Location: dashboard.php');
                     exit();
                 } else {
                     $error = "Usuário desativado, entre em contato com o administrador.";
                 }
         } else {
-            // Senha incorreta
             $error = "Credenciais inválidas. Tente novamente.";
         }
     } else {
-        // Usuário não encontrado
         $error = "Credenciais inválidas. Tente novamente.";
     }
-
     $stmt->close();
 }
 

@@ -2,14 +2,11 @@
 include('header.php');
 include('con_bd.php');
 
-// Verifica se o ID do chamado foi fornecido
 if (!isset($_GET['id'])) {
     die("ID do chamado não fornecido.");
 }
 
 $id = $_GET['id'];
-
-// Consulta para buscar o histórico do chamado
 $sql = "SELECT * FROM historico_chamados WHERE chamado_id = ? ORDER BY data_alteracao DESC";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $id);
@@ -29,8 +26,6 @@ $stmt->bind_param('i', $id);
 $stmt->execute();
 $result = $stmt->get_result();
 $chamado = $result->fetch_assoc();
-
-
 
 if ($chamado['usuario_id'] != $_SESSION['user_id'] && $_SESSION['user_tipo'] == 1) {
     $_SESSION['error_message'] = "Você não tem permissão para ver este chamado.";
