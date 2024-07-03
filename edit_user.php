@@ -3,7 +3,7 @@ include('header.php');
 include('con_bd.php');
 
 if ($_SESSION['user_tipo'] != 3) {
-    header('Location: dashboard.php');
+    echo "<script>window.location.href='dashboard.php';</script>";
     exit;
 }
 
