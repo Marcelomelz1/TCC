@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
 
     if ($stmt->execute()) {
         $_SESSION['success_message'] = "Chamado atualizado com sucesso!";
-        header('Location: dashboard.php');
+        echo "<script>window.location.href='dashboard.php';</script>";
         exit();
     } else {
         $error_message = "Erro ao atualizar o chamado: " . $stmt->error;
@@ -59,7 +59,7 @@ if (isset($_GET['id'])) {
 
         if ($_SESSION['user_tipo'] == 1 && $chamado['usuario_id'] != $_SESSION['user_id']) {
             $_SESSION['error_message'] = "Você não tem permissão para editar este chamado.";
-            header('Location: dashboard.php');
+            echo "<script>window.location.href='dashboard.php';</script>";
             exit();
         }
     } else {

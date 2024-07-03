@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         $_SESSION['success_message'] = "Chamado criado com sucesso!";
-        header('Location: dashboard.php');
+        echo "<script>window.location.href='dashboard.php';</script>";
         exit();
     } else {
         $error_message = "Erro ao criar o chamado: " . $stmt->error;
